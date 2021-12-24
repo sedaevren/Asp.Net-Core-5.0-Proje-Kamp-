@@ -19,41 +19,6 @@ namespace DataAccessLayer.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("EntityLayer.Blog", b =>
-                {
-                    b.Property<int>("BlogID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("BlogContent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BlogCreateDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("BlogImage")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("BlogStatus")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("BlogThumbnailImage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BlogTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CategoryID")
-                        .HasColumnType("int");
-
-                    b.HasKey("BlogID");
-
-                    b.HasIndex("CategoryID");
-
-                    b.ToTable("Blogs");
-                });
-
             modelBuilder.Entity("EntityLayer.Concrete.About", b =>
                 {
                     b.Property<int>("AboutID")
@@ -82,6 +47,46 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("AboutID");
 
                     b.ToTable("Abouts");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Blog", b =>
+                {
+                    b.Property<int>("BlogID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BlogContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("BlogCreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("BlogImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("BlogStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("BlogThumbnailImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BlogTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WriterID")
+                        .HasColumnType("int");
+
+                    b.HasKey("BlogID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("WriterID");
+
+                    b.ToTable("Blogs");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Category", b =>
@@ -120,6 +125,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<DateTime>("CommentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("CommentStatus")
+                        .HasColumnType("bit");
 
                     b.Property<string>("CommentTitle")
                         .HasColumnType("nvarchar(max)");
@@ -164,6 +172,24 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Contacts");
                 });
 
+            modelBuilder.Entity("EntityLayer.Concrete.NewsLetter", b =>
+                {
+                    b.Property<int>("MailID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Mail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("MailStatus")
+                        .HasColumnType("bit");
+
+                    b.HasKey("MailID");
+
+                    b.ToTable("NewsLetters");
+                });
+
             modelBuilder.Entity("EntityLayer.Concrete.Writer", b =>
                 {
                     b.Property<int>("WriterID")
@@ -194,7 +220,7 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Writers");
                 });
 
-            modelBuilder.Entity("EntityLayer.Blog", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Blog", b =>
                 {
                     b.HasOne("EntityLayer.Concrete.Category", "Category")
                         .WithMany("Blogs")
@@ -202,12 +228,20 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EntityLayer.Concrete.Writer", "Writer")
+                        .WithMany("Blogs")
+                        .HasForeignKey("WriterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Writer");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Comment", b =>
                 {
-                    b.HasOne("EntityLayer.Blog", "Blog")
+                    b.HasOne("EntityLayer.Concrete.Blog", "Blog")
                         .WithMany("Comments")
                         .HasForeignKey("BlogID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -216,12 +250,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Blog");
                 });
 
-            modelBuilder.Entity("EntityLayer.Blog", b =>
+            modelBuilder.Entity("EntityLayer.Concrete.Blog", b =>
                 {
                     b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Category", b =>
+                {
+                    b.Navigation("Blogs");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Writer", b =>
                 {
                     b.Navigation("Blogs");
                 });

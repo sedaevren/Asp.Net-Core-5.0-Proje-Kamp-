@@ -1,0 +1,30 @@
+﻿<script src="~/lib/jquery/dist/jquery.js"></script>
+<div class="comment-top">
+    <h4>Yorum yapın</h4>
+    <div class="comment-bottom">
+        <form id="commentForm">
+            <input class="form-control" type="text" name="CommentUserName" placeholder="Adınız Soyadınız" required="">
+            <input class="form-control" type="text" name="CommentTitle" placeholder="Konu" required="">
+
+            <textarea class="form-control" name="CommentContent" placeholder="Yorumunuz..." required=""></textarea>
+            <button type="submit" class="btn btn-primary submit" onclick="submitComment()">Yorum Yap</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function submitComment() {
+        var data = $("#commentForm").serialize();
+        $.ajax({
+            type: 'POST',
+            url: '/Comment/PartialAddComment',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: data,
+            success: function (result) {
+
+            },
+            error: function () {
+            }
+        })
+    }
+</script>
