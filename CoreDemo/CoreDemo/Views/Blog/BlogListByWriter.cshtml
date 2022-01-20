@@ -1,0 +1,72 @@
+﻿@using EntityLayer.Concrete
+@model List<Blog>
+@{
+    ViewData["Title"] = "BlogListByWriter";
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+}
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+<h1>Yazarın Blogları</h1>
+<table class="table table-active">
+    <tr>
+        <th>#</th>
+        <th>Blog Başlığı</th>
+        <th>Oluşturma tarihi</th>
+        <th>Kategori</th>
+        <th>Durum</th>
+        <th>Sil</th>
+        <th>Düzenle</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th>@item.BlogID</th>
+            <td>@item.BlogTitle</td>
+            <td>@( ((DateTime)item.BlogCreateDate).ToString("dd-MMM-yyyy") )</td>
+            <td>@item.Category.CategoryName</td>
+            @if (item.BlogStatus)
+            {
+                <td>Aktif</td>
+            }
+            else
+            {
+                <td>Pasif</td>
+            }
+            <td>
+                <button id="deleteBtn" type="button" class="btn btn-danger btn-sm" onclick="OpenDeletePopup(@item.BlogID)" asp-controller="Blog" asp-action="DeletePopup" data-toggle="modal" data-target="#add-contact">
+                    Sil
+                </button>
+            </td>
+
+            <td><a href="/Blog/EditBlog/@item.BlogID" class="btn btn-warning btn-sm">Düzenle</a></td>
+        </tr>
+    }
+</table>
+<br />
+<div class="modal hide" id="add-contact" tabindex="-1" role="dialog" aria-labelledby="addPositionsLabel" aria-hidden="true">
+    <div id="AddContent">
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    var blogID;
+    function OpenDeletePopup(deleteBlogId) {
+        blogID = deleteBlogId;
+        $.ajax({
+            type: 'GET',
+            url: '/Blog/DeletePopup',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: null,
+        }).done(function (msg) {
+            $("#AddContent").html(msg);
+            $("#add-contact").modal("show");
+        })
+    }
+
+    $("body").on("click", "#save", function () {
+        window.location.href = "/Blog/DeleteBlog/" + blogID;
+    });
+</script>
+<a href="/Blog/BlogAdd" class="btn btn-primary">Yeni Blog Oluştur</a>
+
