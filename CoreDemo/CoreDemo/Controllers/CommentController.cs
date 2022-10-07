@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace CoreDemo.Controllers
 {
+    [AllowAnonymus]
     public class CommentController : Controller
     {
         CommentManager cm = new CommentManager(new EfCommentRepository());

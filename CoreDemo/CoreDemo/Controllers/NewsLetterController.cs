@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace CoreDemo.Controllers
 {
+    [AllowAnonymus]
     public class NewsLetterController : Controller
     {
         NewsLetterManager nm = new NewsLetterManager(new EfNewsLetterRepository());

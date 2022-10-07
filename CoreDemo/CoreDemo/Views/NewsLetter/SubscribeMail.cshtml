@@ -3,28 +3,48 @@
 <div class="tech-btm">
     <p>Teknoloji, yazılım ve diğer bloglar...</p>
     <form id="subscribeForm">
-        <input id="EmailID" type="email" placeholder="Mail" required="" name="Mail">
-        <input type="submit" value="Abone Ol">
+        <input id="txtmail" type="email" placeholder="Mail" required="" name="Mail">
+        <input type="submit" id="btn" value="Abone Ol">
     </form>
 </div>
+@*
+        Kendi yaptığım kısım
+        <script type="text/javascript">
+        $('#subscribeForm').on('submit', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var data = $("#subscribeForm").serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/NewsLetter/SubscribeMail',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: data,
+                success: function (result) {
+                    $('#EmailID').val('');
+                    swal("Mail bültenine abone oldunuz.","Kaydettiğiniz mail adresinize yeni bloglarımız ile ilgili bilgilendirme mailleri göndereceğiz.");
+                },
+                error: function () {
+                }
+            })
+
+        });
+    </script>*@
+
 <script type="text/javascript">
-    $('#subscribeForm').on('submit', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+    $("#btn").click(function () {
+        let values = {
+            Mail: $("#txtmail").val()
+        };
 
-        var data = $("#subscribeForm").serialize();
         $.ajax({
-            type: 'POST',
-            url: '/NewsLetter/SubscribeMail',
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            data: data,
-            success: function (result) {
-                $('#EmailID').val('');
-                swal("Mail bültenine abone oldunuz.","Kaydettiğiniz mail adresinize yeni bloglarımız ile ilgili bilgilendirme mailleri göndereceğiz.");
-            },
-            error: function () {
+            type: "post",
+            url: "/NewsLetter/SubscribeMail",
+            data: values,
+            success: function (func) {
+                let result = JQuery.parseJSON(func);
             }
-        })
 
-    });
+        })
+    })
 </script>

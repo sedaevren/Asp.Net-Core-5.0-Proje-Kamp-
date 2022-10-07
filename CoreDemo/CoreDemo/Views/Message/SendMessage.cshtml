@@ -1,0 +1,29 @@
+﻿@model EntityLayer.Concrete.Message2
+
+@{
+    ViewData["Title"] = "SendMessage";
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+}
+<style>
+    .ddColor {
+        color: black!important;
+    }
+</style>
+<h1>Yeni Mesaj Oluşturma</h1>
+</br>
+@using (Html.BeginForm("SendMessage", "Message", FormMethod.Post))
+{
+    @Html.Label("Alıcı")
+    @Html.DropDownListFor(x => x.Receiver, (List<SelectListItem>)ViewBag.RecieverUser, new { @class = "form-control ddColor" })
+    <br />
+    @Html.Label("Konu")
+    @Html.TextBoxFor(x => x.Subject, new { @class = "form-control" })
+    <br />
+    <br />
+    @Html.Label("Mesaj")
+    @Html.TextAreaFor(x => x.MessageDetails, 15, 3, new { @class = "form-control" })
+    <br />
+
+    <button class="btn btn-info">Mesajı Gönder</button>
+}
+

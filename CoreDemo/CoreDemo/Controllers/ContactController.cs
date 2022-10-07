@@ -9,14 +9,17 @@ using System.Threading.Tasks;
 
 namespace CoreDemo.Controllers
 {
+    [AllowAnonymus]
     public class ContactController : Controller
     {
         ContactManager cm = new ContactManager(new EfContactRepository());
+        [AllowAnonymus]
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
+        [AllowAnonymus]
 
         [HttpPost]
         public IActionResult Index(Contact p)
